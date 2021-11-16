@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>パイプを繋ぐゲーム</title>
+    <style>
+      body {
+        background-color: black;
+        color: white
+      }
+      td {
+        padding: 0;
+      }
+      pre {
+        font-family: consolas;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      button {
+        background-color: transparent;
+        border: 1.5px solid white;
+        color: white;
+        font-size: 1.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <p>パイプをつないでゴールを目指すゲームです。</p>
+    <p>パイプの種類は完全ランダムで、ゴールできない場合もあります（笑）</p>
+    <pre>
+    <table>
+      <tbody id="game">
+        <tr><td>-></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>-></td></tr>
+      </tbody>
+    </table>
+    <h2 id="result">let's go!</h2>
+    <button id="reload">reload</button>
+    </pre>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="main.js"></script>
+  <!-- <script src="no_class_main.js"></script> -->
+</html>
