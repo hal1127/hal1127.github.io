@@ -192,7 +192,7 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
                         for (const pc of pipe_connects[pipe.type][i]) {
                             if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_array_equal).call(self, pc, [0, 1])) {
                                 self.pipes[c][r].index = i.toString();
-                                return true;
+                                return [used, true];
                             }
                         }
                     }
@@ -201,13 +201,14 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
                         let [cpc, cpr] = cp;
                         let nxtc = cpc + c, nxtr = cpr + r;
                         if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_is_in_board).call(self, nxtc, nxtr) && !used[nxtc][nxtr]) {
-                            if (dfs(nxtc, nxtr, c, r))
-                                return true;
+                            console.log(used);
+                            if (dfs(nxtc, nxtr, c, r)[1])
+                                return [used, true];
                         }
                     }
                 }
                 used[c][r] = false;
-                return false;
+                return [used, false];
             }
             return dfs(0, 0, 0, -1);
         }
@@ -322,13 +323,16 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
         }
     });
     $("#can-clear").on("click", function () {
-        console.log(board.can_clear());
+        let [used, _] = board.can_clear();
         let [cps, goal] = board.connecting_pipes();
         for (let i = 0; i < cps.length; i++) {
             for (let j = 0; j < cps[0].length; j++) {
+                $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape);
                 if (cps[i][j] == true) {
-                    $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape);
                     $(`#pipe-${i}-${j}`).css("color", "#0f0");
+                }
+                if (used[i][j] == true) {
+                    $(`#pipe-${i}-${j}`).css("color", "#00f");
                 }
             }
         }

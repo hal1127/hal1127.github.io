@@ -194,12 +194,12 @@
       return [bfs, goal]
     }
 
-    can_clear(): boolean {
+    can_clear(): [boolean[][], boolean] {
       let self = this
       let used: boolean[][] = []
       for (let i = 0; i < 5; i++) used.push(new Array(5).fill(false))
 
-      function dfs(c: number, r: number, prec, prer): boolean {
+      function dfs(c: number, r: number, prec, prer): [boolean[][], boolean] {
         let pipe = self.pipes[c][r]
         used[c][r] = true
 
@@ -216,7 +216,7 @@
             for (const pc of pipe_connects[pipe.type][i]) {
               if (self.#array_equal(pc, [0, 1])) {
                 self.pipes[c][r].index = i.toString()
-                return true
+                return [used, true]
               }
             }
           }
@@ -226,13 +226,14 @@
             let [cpc, cpr] = cp
             let nxtc = cpc+c, nxtr = cpr+r
             if (self.#is_in_board(nxtc, nxtr) && !used[nxtc][nxtr]) {
-              if (dfs(nxtc, nxtr, c, r)) return true
+              console.log(used)
+              if (dfs(nxtc, nxtr, c, r)[1]) return [used, true]
             }
           }
         }
 
         used[c][r] = false
-        return false
+        return [used, false]
       }
       return dfs(0, 0, 0, -1)
     }
@@ -358,13 +359,16 @@
   })
 
   $("#can-clear").on("click", function() {
-    console.log(board.can_clear())
+    let [used, _] = board.can_clear()
     let [cps, goal] = board.connecting_pipes()
     for (let i = 0; i < cps.length; i++) {
       for (let j = 0; j < cps[0].length; j++) {
+        $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape)
         if (cps[i][j] == true) {
-          $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape)
           $(`#pipe-${i}-${j}`).css("color", "#0f0")
+        }
+        if (used[i][j] == true) {
+          $(`#pipe-${i}-${j}`).css("color", "#00f")
         }
       }
     }
