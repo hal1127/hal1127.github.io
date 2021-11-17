@@ -275,7 +275,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
                     for (let k = 0; k < cps.length; k++) {
                         for (let l = 0; l < cps[0].length; l++) {
                             if (cps[k][l] == true) {
-                                $(`#pipe-${k}-${l}`).css("color", "green");
+                                $(`#pipe-${k}-${l}`).css("color", "#0f0");
                             }
                         }
                     }
@@ -293,7 +293,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
     for (let i = 0; i < cps.length; i++) {
         for (let j = 0; j < cps[0].length; j++) {
             if (cps[i][j] == true) {
-                $(`#pipe-${i}-${j}`).css("color", "green");
+                $(`#pipe-${i}-${j}`).css("color", "#0f0");
             }
         }
     }
@@ -325,7 +325,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
         for (let i = 0; i < cps.length; i++) {
             for (let j = 0; j < cps[0].length; j++) {
                 if (cps[i][j] == true) {
-                    $(`#pipe-${i}-${j}`).css("color", "green");
+                    $(`#pipe-${i}-${j}`).css("color", "#0f0");
                 }
             }
         }

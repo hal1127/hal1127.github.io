@@ -304,7 +304,7 @@
           for (let k = 0; k < cps.length; k++) {
             for (let l = 0; l < cps[0].length; l++) {
               if (cps[k][l] == true) {
-                $(`#pipe-${k}-${l}`).css("color", "green")
+                $(`#pipe-${k}-${l}`).css("color", "#0f0")
               }
             }
           }
@@ -321,7 +321,7 @@
   for (let i = 0; i < cps.length; i++) {
     for (let j = 0; j < cps[0].length; j++) {
       if (cps[i][j] == true) {
-        $(`#pipe-${i}-${j}`).css("color", "green")
+        $(`#pipe-${i}-${j}`).css("color", "#0f0")
       }
     }
   }
@@ -355,7 +355,7 @@
     for (let i = 0; i < cps.length; i++) {
       for (let j = 0; j < cps[0].length; j++) {
         if (cps[i][j] == true) {
-          $(`#pipe-${i}-${j}`).css("color", "green")
+          $(`#pipe-${i}-${j}`).css("color", "#0f0")
         }
       }
     }
