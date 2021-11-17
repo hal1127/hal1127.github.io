@@ -126,13 +126,12 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
                 }
             }
         }
-        // [c, r]のパイプとつながっているパイプ
+        // [c, r]のパイプとつながっているパイプの座標
         connected_pipes(c, r) {
             let p = [];
             for (const connect of this.pipes[c][r].connects) {
                 if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_is_mutual_connect).call(this, c, r, connect)) {
-                    let cv = connect;
-                    p.push([c + cv[0], r + cv[1]]);
+                    p.push([c + connect[0], r + connect[1]]);
                 }
             }
             return p;
@@ -172,32 +171,66 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
             }
             return [bfs, goal];
         }
+        // can_connect(c, r, dir) {
+        //   if (!this.#is_in_board(c+dir[0], r+dir[1])) return false
+        //   let pipe = this.pipes[c+dir[0]][r+dir[1]]
+        //   for (let i = 0; i < pipes[pipe.type].length; i++) {
+        //     for (const c of pipe_connects[pipe.type][i]) {
+        //       if (this.#array_equal([c[0]+dir[0], c[1]+dir[1]], [0, 0])) {
+        //         return true
+        //       }
+        //     }
+        //   }
+        //   return false
+        // }
+        // can_connect_pipes(c, r): number[][] {
+        //   let p = []
+        //   for (const connect of this.pipes[c][r].connects) {
+        //     if (this.can_connect(c, r, connect)) {
+        //       p.push([c+connect[0], r+connect[1]])
+        //     }
+        //   }
+        //   return p
+        // }
         can_clear() {
             let self = this;
-            function dfs(c, r) {
+            let used = [];
+            for (let i = 0; i < 5; i++)
+                used.push(new Array(5).fill(false));
+            function dfs(c, r, prec, prer) {
                 let pipe = self.pipes[c][r];
-                // console.log([c, r], [pipe.type, pipe.index])
-                let [dfs, _] = this.connecting_pipes();
-                if (c == 4 && r == 4) {
-                    if (dfs[4][4] == true) {
-                        for (const c of pipe.connects) {
-                            if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_array_equal).call(this, c, [0, 1]))
+                used[c][r] = true;
+                for (let i = 0; i < pipes[pipe.type].length; i++) {
+                    let is_ok = false;
+                    for (const pc of pipe_connects[pipe.type][i]) {
+                        if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_array_equal).call(self, pc, [prec - c, prer - r])) {
+                            is_ok = true;
+                        }
+                    }
+                    if (!is_ok)
+                        continue;
+                    if (c == 4 && r == 4) {
+                        for (const pc of pipe_connects[pipe.type][i]) {
+                            if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_array_equal).call(self, pc, [0, 1])) {
+                                self.pipes[c][r].index = i.toString();
+                                return true;
+                            }
+                        }
+                    }
+                    self.pipes[c][r].index = i.toString();
+                    for (const cp of pipe.connects) {
+                        let [cpc, cpr] = cp;
+                        let nxtc = cpc + c, nxtr = cpr + r;
+                        if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_is_in_board).call(self, nxtc, nxtr) && !used[nxtc][nxtr]) {
+                            if (dfs(nxtc, nxtr, c, r))
                                 return true;
                         }
                     }
                 }
-                for (let i = 0; i < pipes[pipe.type].length; i++) {
-                    self.pipes[c][r].index = i.toString();
-                    for (const cp of self.connected_pipes(c, r)) {
-                        let [cpc, cpr] = cp;
-                        let nxtc = c + cpc, nxtr = r + cpr;
-                        if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_is_in_board).call(self, nxtc, nxtr)) {
-                            return dfs(nxtc, nxtr);
-                        }
-                    }
-                }
+                used[c][r] = false;
+                return false;
             }
-            return dfs(0, 0);
+            return dfs(0, 0, 0, -1);
         }
     }
     _Board_instances = new WeakSet(), _Board_is_in_board = function _Board_is_in_board(c, r) {
@@ -307,6 +340,24 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
         }
         else {
             $("#result").text("let's go!!");
+        }
+    });
+    $("#can-clear").on("click", function () {
+        console.log(board.can_clear());
+        let [cps, goal] = board.connecting_pipes();
+        for (let i = 0; i < cps.length; i++) {
+            for (let j = 0; j < cps[0].length; j++) {
+                if (cps[i][j] == true) {
+                    $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape);
+                    $(`#pipe-${i}-${j}`).css("color", "#0f0");
+                }
+            }
+        }
+        if (goal) {
+            $("#result").text("I can clear it.");
+        }
+        else {
+            $("#result").text("I can't clear it.");
         }
     });
 }

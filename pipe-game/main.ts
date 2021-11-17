@@ -92,27 +92,27 @@
       }
     }
 
-    get type() {
+    get type(): string {
       return this.pipe["pipe-type"]
     }
 
-    set type(pt) {
+    set type(pt: string) {
       this.pipe["pipe-type"] = pt
     }
 
-    get index() {
+    get index(): string {
       return this.pipe["pipe-index"]
     }
 
-    set index(pi) {
+    set index(pi: string) {
       this.pipe["pipe-index"] = pi
     }
 
-    get pos() {
+    get pos(): number[] {
       return this.pipe["pipe-pos"]
     }
 
-    get shape() {
+    get shape(): string {
       return pipes[this.type][parseInt(this.index)]
     }
 
@@ -146,13 +146,12 @@
       }
     }
 
-    // [c, r]のパイプとつながっているパイプ
-    connected_pipes(c, r) {
+    // [c, r]のパイプとつながっているパイプの座標
+    connected_pipes(c, r): number[][] {
       let p = []
       for (const connect of this.pipes[c][r].connects) {
         if (this.#is_mutual_connect(c, r, connect)) {
-          let cv = connect
-          p.push([c+cv[0], r+cv[1]])
+          p.push([c+connect[0], r+connect[1]])
         }
       }
       return p
@@ -185,7 +184,7 @@
         }
       }
 
-      let goal = false
+      let goal: boolean = false
       if (bfs[4][4] == true) {
         for (const c of this.pipes[4][4].connects) {
           if (this.#array_equal(c, [0, 1])) goal = true
@@ -195,32 +194,70 @@
       return [bfs, goal]
     }
 
-    can_clear() {
+    // can_connect(c, r, dir) {
+    //   if (!this.#is_in_board(c+dir[0], r+dir[1])) return false
+    //   let pipe = this.pipes[c+dir[0]][r+dir[1]]
+    //   for (let i = 0; i < pipes[pipe.type].length; i++) {
+    //     for (const c of pipe_connects[pipe.type][i]) {
+    //       if (this.#array_equal([c[0]+dir[0], c[1]+dir[1]], [0, 0])) {
+    //         return true
+    //       }
+    //     }
+    //   }
+    //   return false
+    // }
+
+    // can_connect_pipes(c, r): number[][] {
+    //   let p = []
+    //   for (const connect of this.pipes[c][r].connects) {
+    //     if (this.can_connect(c, r, connect)) {
+    //       p.push([c+connect[0], r+connect[1]])
+    //     }
+    //   }
+    //   return p
+    // }
+
+    can_clear(): boolean {
       let self = this
-      function dfs(c, r) {
+      let used: boolean[][] = []
+      for (let i = 0; i < 5; i++) used.push(new Array(5).fill(false))
+
+      function dfs(c: number, r: number, prec, prer): boolean {
         let pipe = self.pipes[c][r]
-        // console.log([c, r], [pipe.type, pipe.index])
-        let [dfs, _] = this.connecting_pipes()
-        if (c == 4 && r == 4) {
-          if (dfs[4][4] == true) {
-            for (const c of pipe.connects) {
-              if (this.#array_equal(c, [0, 1])) return true
+        used[c][r] = true
+
+        for (let i = 0; i < pipes[pipe.type].length; i++) {
+          let is_ok = false
+          for (const pc of pipe_connects[pipe.type][i]) {
+            if (self.#array_equal(pc, [prec-c, prer-r])) {
+              is_ok = true
+            }
+          }
+          if (!is_ok) continue
+
+          if (c == 4 && r == 4) {
+            for (const pc of pipe_connects[pipe.type][i]) {
+              if (self.#array_equal(pc, [0, 1])) {
+                self.pipes[c][r].index = i.toString()
+                return true
+              }
+            }
+          }
+
+          self.pipes[c][r].index = i.toString()
+          for (const cp of pipe.connects) {
+            let [cpc, cpr] = cp
+            let nxtc = cpc+c, nxtr = cpr+r
+            if (self.#is_in_board(nxtc, nxtr) && !used[nxtc][nxtr]) {
+              if (dfs(nxtc, nxtr, c, r)) return true
             }
           }
         }
 
-        for (let i = 0; i < pipes[pipe.type].length; i++) {
-          self.pipes[c][r].index = i.toString()
-          for (const cp of self.connected_pipes(c, r)) {
-            let [cpc, cpr] = cp
-            let nxtc = c+cpc, nxtr = r+cpr
-            if (self.#is_in_board(nxtc, nxtr)) {
-              return dfs(nxtc, nxtr)
-            }
-          }
-        }
+        used[c][r] = false
+        return false
       }
-      return dfs(0, 0)
+      return dfs(0, 0, 0, -1)
     }
 
     #is_in_board(c, r)
@@ -342,4 +379,24 @@
       $("#result").text("let's go!!")
     }
   })
+
+  $("#can-clear").on("click", function() {
+    console.log(board.can_clear())
+    let [cps, goal] = board.connecting_pipes()
+    for (let i = 0; i < cps.length; i++) {
+      for (let j = 0; j < cps[0].length; j++) {
+        if (cps[i][j] == true) {
+          $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape)
+          $(`#pipe-${i}-${j}`).css("color", "#0f0")
+        }
+      }
+    }
+
+    if (goal) {
+      $("#result").text("I can clear it.")
+    } else {
+      $("#result").text("I can't clear it.")
+    }
+  })
+
 }

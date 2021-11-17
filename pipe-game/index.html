@@ -36,20 +36,29 @@
       #result {
         margin: 0;
         margin-block-start: 0;
+        margin-block-end: 0;
         position: relative;
         top: -1em;
       }
-      #reload {
+
+      #buttons {
+        display: flex;
+        justify-content: left;
+      }
+      #reload, #can-clear {
         background-color: transparent;
         border: 1.5px solid white;
         color: white;
         font-size: 1.5em;
+        margin-left: 1em;
       }
     </style>
   </head>
   <body>
     <p>パイプをつないでゴールを目指すゲームです。</p>
     <p>パイプの種類は完全ランダムで、ゴールできない場合もあります（笑）</p>
+    <p>その時のために[Can we clear it?]ボタンを設置しました！</p>
+    <p>押すと自動でクリアできるか判定してくれます！</p>
     <pre>
     <table>
       <tbody id="game">
@@ -61,7 +70,10 @@
       </tbody>
     </table>
     <h2 id="result">let's go!</h2>
-    <button id="reload">reload</button>
+    <div id="buttons">
+      <button id="reload">reload</button>
+      <button id="can-clear">Can we clear it?</button>
+    </div>
     </pre>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
