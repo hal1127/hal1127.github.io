@@ -1,5 +1,3 @@
-declare var require: any;
-import $ from 'jQuery'
 {
   function Stack() {
     this.__a = new Array();

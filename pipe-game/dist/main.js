@@ -4,7 +4,6 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, _Board_lower_pipe, _Board_left_pipe, _Board_is_mutual_connect, _Board_connects_vec;
-import $ from 'jQuery';
 {
     function Stack() {
         this.__a = new Array();
