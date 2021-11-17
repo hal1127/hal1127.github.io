@@ -3,7 +3,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, _Board_lower_pipe, _Board_left_pipe, _Board_is_mutual_connect, _Board_connects_vec;
+var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array_equal;
 {
     class Queue {
         constructor() {
@@ -62,10 +62,10 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
     ];
     let none_pipe = [" "];
     let pipes = { "1": l_pipe, "2": i_pipe, "3": t_pipe, "4": none_pipe };
-    let l_pipe_connect = [["u", "r"], ["r", "lw"], ["lw", "l"], ["u", "l"]];
-    let i_pipe_connect = [["u", "lw"], ["r", "l"]];
-    let t_pipe_connect = [["u", "r", "lw"], ["r", "lw", "l"],
-        ["u", "lw", "l"], ["u", "r", "l"]];
+    let l_pipe_connect = [[[-1, 0], [0, 1]], [[0, 1], [1, 0]], [[1, 0], [0, -1]], [[-1, 0], [0, -1]]];
+    let i_pipe_connect = [[[-1, 0], [1, 0]], [[0, 1], [0, -1]]];
+    let t_pipe_connect = [[[-1, 0], [0, 1], [1, 0]], [[0, 1], [1, 0], [0, -1]],
+        [[-1, 0], [1, 0], [0, -1]], [[-1, 0], [0, 1], [0, -1]]];
     let none_pipe_connect = [[]];
     let pipe_connects = {
         "1": l_pipe_connect,
@@ -128,12 +128,10 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
         }
         // [c, r]のパイプとつながっているパイプ
         connected_pipes(c, r) {
-            if (this.pipes[c][r].type == "4")
-                return [];
             let p = [];
             for (const connect of this.pipes[c][r].connects) {
                 if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_is_mutual_connect).call(this, c, r, connect)) {
-                    let cv = __classPrivateFieldGet(this, _Board_instances, "m", _Board_connects_vec).call(this, connect);
+                    let cv = connect;
                     p.push([c + cv[0], r + cv[1]]);
                 }
             }
@@ -147,7 +145,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
             let pipe = board.pipes[c][r];
             let bfs = [new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)];
             pipe.connects.forEach(connect => {
-                if (connect == "l") {
+                if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_array_equal).call(this, connect, [0, -1])) {
                     bfs[c][r] = true;
                     q.push([c, r]);
                 }
@@ -168,7 +166,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
             let goal = false;
             if (bfs[4][4] == true) {
                 for (const c of this.pipes[4][4].connects) {
-                    if (c == "r")
+                    if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_array_equal).call(this, c, [0, 1]))
                         goal = true;
                 }
             }
@@ -183,7 +181,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
                 if (c == 4 && r == 4) {
                     if (dfs[4][4] == true) {
                         for (const c of pipe.connects) {
-                            if (c == "r")
+                            if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_array_equal).call(this, c, [0, 1]))
                                 return true;
                         }
                     }
@@ -204,59 +202,24 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
     }
     _Board_instances = new WeakSet(), _Board_is_in_board = function _Board_is_in_board(c, r) {
         return 0 <= c && c < 5 && 0 <= r && r < 5;
-    }, _Board_upper_pipe = function _Board_upper_pipe(c, r) {
-        let up = this.pipes[c - 1][r];
-        return up;
-    }, _Board_right_pipe = function _Board_right_pipe(c, r) {
-        let rp = this.pipes[c][r + 1];
-        return rp;
-    }, _Board_lower_pipe = function _Board_lower_pipe(c, r) {
-        let lwp = this.pipes[c + 1][r];
-        return lwp;
-    }, _Board_left_pipe = function _Board_left_pipe(c, r) {
-        let lp = this.pipes[c][r - 1];
-        return lp;
     }, _Board_is_mutual_connect = function _Board_is_mutual_connect(c, r, dir) {
-        if (dir == "u" && __classPrivateFieldGet(this, _Board_instances, "m", _Board_is_in_board).call(this, c - 1, r)) {
-            // if (this.#upper_pipe(c, r).type == "4") return false
-            for (const cnt of __classPrivateFieldGet(this, _Board_instances, "m", _Board_upper_pipe).call(this, c, r).connects) {
-                if (cnt == "lw")
-                    return true;
-            }
-        }
-        else if (dir == "r" && __classPrivateFieldGet(this, _Board_instances, "m", _Board_is_in_board).call(this, c, r + 1)) {
-            // if (this.#right_pipe(c, r).type == "4") return false
-            for (const cnt of __classPrivateFieldGet(this, _Board_instances, "m", _Board_right_pipe).call(this, c, r).connects) {
-                if (cnt == "l")
-                    return true;
-            }
-        }
-        else if (dir == "lw" && __classPrivateFieldGet(this, _Board_instances, "m", _Board_is_in_board).call(this, c + 1, r)) {
-            // if (this.#lower_pipe(c, r).type == "4") return false
-            for (const cnt of __classPrivateFieldGet(this, _Board_instances, "m", _Board_lower_pipe).call(this, c, r).connects) {
-                if (cnt == "u")
-                    return true;
-            }
-        }
-        else if (dir == "l" && __classPrivateFieldGet(this, _Board_instances, "m", _Board_is_in_board).call(this, c, r - 1)) {
-            // if (this.#left_pipe(c, r).type == "4") return false
-            for (const cnt of __classPrivateFieldGet(this, _Board_instances, "m", _Board_left_pipe).call(this, c, r).connects) {
-                if (cnt == "r")
-                    return true;
-            }
+        if (!__classPrivateFieldGet(this, _Board_instances, "m", _Board_is_in_board).call(this, c + dir[0], r + dir[1]))
+            return false;
+        for (const cnt of this.pipes[c + dir[0]][r + dir[1]].connects) {
+            if (__classPrivateFieldGet(this, _Board_instances, "m", _Board_array_equal).call(this, [cnt[0] + dir[0], cnt[1] + dir[1]], [0, 0]))
+                return true;
         }
         return false;
-    }, _Board_connects_vec = function _Board_connects_vec(c) {
-        if (c == "u")
-            return [-1, 0];
-        else if (c == "r")
-            return [0, 1];
-        else if (c == "lw")
-            return [1, 0];
-        else if (c == "l")
-            return [0, -1];
+    }, _Board_array_equal = function _Board_array_equal(a, b) {
+        if (a.length != b.length)
+            return false;
+        for (let i = 0; i < a.length; i++) {
+            if (a[i] != b[i]) {
+                return false;
+            }
+        }
+        return true;
     };
-    // let board = new Board([[["3", "0"],["2", "0"],,,], new Array(5), new Array(5), new Array(5), new Array(5)])
     let board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]);
     let game = $("#game");
     for (const [i, g] of game.children().get().entries()) {
@@ -265,7 +228,6 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
                 continue;
             let pipe = board.pipes[i][j - 1];
             let b = h.childNodes[0];
-            console.log(b);
             $(b).attr("id", `pipe-${i}-${j - 1}`);
             $(b).attr("col", i);
             $(b).attr("row", j - 1);
@@ -315,17 +277,18 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
     }
     $("#reload").on("click", function () {
         board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]);
-        game.children().each(function (i, g) {
-            $(g).children().each(function (j, h) {
-                if (j != 0 && j != 6) {
-                    let pipe = board.pipes[i][j - 1];
-                    $(h).attr("pipe-type", pipe.type);
-                    $(h).attr("pipe-index", pipe.index);
-                    $(h).text(pipes[pipe.type][pipe.index]);
-                    $(h).css("user-select", "none");
-                }
-            });
-        });
+        for (const [i, g] of game.children().get().entries()) {
+            for (const [j, h] of g.childNodes.entries()) {
+                if (j == 0 || j == 6)
+                    continue;
+                let b = h.childNodes[0];
+                let pipe = board.pipes[i][j - 1];
+                $(b).attr("pipe-type", pipe.type);
+                $(b).attr("pipe-index", pipe.index);
+                $(b).text(pipes[pipe.type][pipe.index]);
+                $(b).css("user-select", "none");
+            }
+        }
         for (let i = 0; i < board.pipes.length; i++) {
             for (let j = 0; j < board.pipes[0].length; j++) {
                 $(`#pipe-${i}-${j}`).css("color", "white");

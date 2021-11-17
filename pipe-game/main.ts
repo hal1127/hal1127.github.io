@@ -68,11 +68,12 @@
   let none_pipe = [" "]
   let pipes = {"1": l_pipe, "2": i_pipe, "3": t_pipe, "4": none_pipe}
 
-  let l_pipe_connect = [["u", "r"], ["r", "lw"], ["lw", "l"], ["u", "l"]]
-  let i_pipe_connect = [["u", "lw"], ["r", "l"]]
-  let t_pipe_connect = [["u", "r", "lw"], ["r", "lw", "l"],
-                        ["u", "lw", "l"], ["u", "r", "l"]]
+  let l_pipe_connect = [[[-1, 0], [0, 1]], [[0, 1], [1, 0]], [[1, 0], [0, -1]], [[-1, 0], [0, -1]]]
+  let i_pipe_connect = [[[-1, 0], [1, 0]], [[0, 1], [0, -1]]]
+  let t_pipe_connect = [[[-1, 0], [0, 1], [1, 0]], [[0, 1], [1, 0], [0, -1]],
+                        [[-1, 0], [1, 0], [0, -1]], [[-1, 0], [0, 1], [0, -1]]]
   let none_pipe_connect = [[]]
+
   let pipe_connects = {
     "1": l_pipe_connect,
     "2": i_pipe_connect,
@@ -122,7 +123,7 @@
       return this
     }
 
-    get connects() {
+    get connects(): number[][] {
       return pipe_connects[this.type][this.index]
     }
   }
@@ -147,12 +148,10 @@
 
     // [c, r]のパイプとつながっているパイプ
     connected_pipes(c, r) {
-      if (this.pipes[c][r].type == "4") return []
-
       let p = []
       for (const connect of this.pipes[c][r].connects) {
         if (this.#is_mutual_connect(c, r, connect)) {
-          let cv = this.#connects_vec(connect)
+          let cv = connect
           p.push([c+cv[0], r+cv[1]])
         }
       }
@@ -168,7 +167,7 @@
 
       let bfs: boolean[][] = [new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]
       pipe.connects.forEach(connect => {
-        if (connect == "l") {
+        if (this.#array_equal(connect, [0, -1])) {
           bfs[c][r] = true
           q.push([c, r])
         }
@@ -189,7 +188,7 @@
       let goal = false
       if (bfs[4][4] == true) {
         for (const c of this.pipes[4][4].connects) {
-          if (c == "r") goal = true
+          if (this.#array_equal(c, [0, 1])) goal = true
         }
       }
 
@@ -205,7 +204,7 @@
         if (c == 4 && r == 4) {
           if (dfs[4][4] == true) {
             for (const c of pipe.connects) {
-              if (c == "r") return true
+              if (this.#array_equal(c, [0, 1])) return true
             }
           }
         }
@@ -229,61 +228,26 @@
       return 0 <= c && c < 5 && 0 <= r && r < 5
     }
 
-    #upper_pipe(c, r) {
-      let up = this.pipes[c-1][r]
-      return up
-    }
-
-    #right_pipe(c, r) {
-      let rp = this.pipes[c][r+1]
-      return rp
-    }
-
-    #lower_pipe(c, r) {
-      let lwp = this.pipes[c+1][r]
-      return lwp
-    }
-
-    #left_pipe(c, r) {
-      let lp = this.pipes[c][r-1]
-      return lp
-    }
-
     // [c, r]のパイプがdirの方向と相互接続しているか
     #is_mutual_connect(c, r, dir) {
-      if (dir == "u" && this.#is_in_board(c-1, r)) {
-        // if (this.#upper_pipe(c, r).type == "4") return false
-        for (const cnt of this.#upper_pipe(c, r).connects) {
-          if (cnt == "lw") return true
-        }
-      } else if (dir == "r" && this.#is_in_board(c, r+1)) {
-        // if (this.#right_pipe(c, r).type == "4") return false
-        for (const cnt of this.#right_pipe(c, r).connects) {
-          if (cnt == "l") return true
-        }
-      } else if (dir == "lw" && this.#is_in_board(c+1, r)) {
-        // if (this.#lower_pipe(c, r).type == "4") return false
-        for (const cnt of this.#lower_pipe(c, r).connects) {
-          if (cnt == "u") return true
-        }
-      } else if (dir == "l" && this.#is_in_board(c, r-1)) {
-        // if (this.#left_pipe(c, r).type == "4") return false
-        for (const cnt of this.#left_pipe(c, r).connects) {
-          if (cnt == "r") return true
-        }
+      if (!this.#is_in_board(c+dir[0], r+dir[1])) return false
+      for (const cnt of this.pipes[c+dir[0]][r+dir[1]].connects) {
+        if (this.#array_equal([cnt[0]+dir[0], cnt[1]+dir[1]], [0, 0])) return true
       }
       return false
     }
 
-    #connects_vec(c) {
-      if (c == "u") return [-1, 0]
-      else if (c == "r") return [0, 1]
-      else if (c == "lw") return [1, 0]
-      else if (c == "l") return [0, -1]
+    #array_equal(a: number[], b: number[]): boolean {
+      if (a.length != b.length) return false
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) {
+          return false
+        }
+      }
+      return true
     }
   }
 
-  // let board = new Board([[["3", "0"],["2", "0"],,,], new Array(5), new Array(5), new Array(5), new Array(5)])
   let board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)])
 
   let game = $("#game")
@@ -291,9 +255,8 @@
     for (const [j, h] of g.childNodes.entries()) {
       if (j == 0 || j == 6) continue
       let pipe = board.pipes[i][j-1]
-
       let b = h.childNodes[0]
-      console.log(b)
+
       $(b).attr("id", `pipe-${i}-${j-1}`)
       $(b).attr("col", i)
       $(b).attr("row", j-1)
@@ -347,17 +310,17 @@
 
   $("#reload").on("click", function() {
     board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)])
-    game.children().each(function (i, g) {
-      $(g).children().each(function (j, h) {
-        if (j != 0 && j != 6) {
-          let pipe = board.pipes[i][j-1]
-          $(h).attr("pipe-type", pipe.type)
-          $(h).attr("pipe-index", pipe.index)
-          $(h).text(pipes[pipe.type][pipe.index])
-          $(h).css("user-select", "none")
-        }
-      })
-    })
+    for (const [i, g] of game.children().get().entries()) {
+      for (const [j, h] of g.childNodes.entries()) {
+        if (j == 0 || j == 6) continue
+        let b = h.childNodes[0]
+        let pipe = board.pipes[i][j-1]
+        $(b).attr("pipe-type", pipe.type)
+        $(b).attr("pipe-index", pipe.index)
+        $(b).text(pipes[pipe.type][pipe.index])
+        $(b).css("user-select", "none")
+      }
+    }
     for (let i = 0; i < board.pipes.length; i++) {
       for (let j = 0; j < board.pipes[0].length; j++) {
         $(`#pipe-${i}-${j}`).css("color", "white")
