@@ -201,7 +201,6 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
                         let [cpc, cpr] = cp;
                         let nxtc = cpc + c, nxtr = cpr + r;
                         if (__classPrivateFieldGet(self, _Board_instances, "m", _Board_is_in_board).call(self, nxtc, nxtr) && !used[nxtc][nxtr]) {
-                            console.log(used);
                             if (dfs(nxtc, nxtr, c, r)[1])
                                 return [used, true];
                         }
@@ -333,10 +332,10 @@ var _Board_instances, _Board_is_in_board, _Board_is_mutual_connect, _Board_array
         for (let i = 0; i < cps.length; i++) {
             for (let j = 0; j < cps[0].length; j++) {
                 $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape);
-                if (cps[i][j] == true) {
+                if (cps[i][j]) {
                     $(`#pipe-${i}-${j}`).css("color", "#0f0");
                 }
-                if (used[i][j] == true) {
+                if (used[i][j]) {
                     $(`#pipe-${i}-${j}`).css("color", "#00f");
                 }
             }

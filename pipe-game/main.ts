@@ -226,7 +226,6 @@
             let [cpc, cpr] = cp
             let nxtc = cpc+c, nxtr = cpr+r
             if (self.#is_in_board(nxtc, nxtr) && !used[nxtc][nxtr]) {
-              console.log(used)
               if (dfs(nxtc, nxtr, c, r)[1]) return [used, true]
             }
           }
@@ -369,10 +368,10 @@
     for (let i = 0; i < cps.length; i++) {
       for (let j = 0; j < cps[0].length; j++) {
         $(`#pipe-${i}-${j}`).text(board.pipes[i][j].shape)
-        if (cps[i][j] == true) {
+        if (cps[i][j]) {
           $(`#pipe-${i}-${j}`).css("color", "#0f0")
         }
-        if (used[i][j] == true) {
+        if (used[i][j]) {
           $(`#pipe-${i}-${j}`).css("color", "#00f")
         }
       }
