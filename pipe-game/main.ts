@@ -359,6 +359,11 @@
   })
 
   $("#can-clear").on("click", function() {
+    for (let i = 0; i < board.pipes.length; i++) {
+      for (let j = 0; j < board.pipes[0].length; j++) {
+        $(`#pipe-${i}-${j}`).css("color", "white")
+      }
+    }
     let [used, _] = board.can_clear()
     let [cps, goal] = board.connecting_pipes()
     for (let i = 0; i < cps.length; i++) {
