@@ -12,15 +12,23 @@
       td {
         padding: 0;
       }
-      pre {
-        font-family: consolas, 'Courier New', Courier, monospace;
-        font-weight: bold;
-      }
       p {
         margin: 0;
         padding: 0;
       }
-      button {
+      pre {
+        font-family: consolas, 'Courier New', Courier, monospace;
+        font-weight: bold;
+      }
+      td > button {
+        font-family: consolas, 'Courier New', Courier, monospace;
+        font-weight: bold;
+        background-color: transparent;
+        color: white;
+        border: 0px;
+        font-size: 1.25em;
+      }
+      #reload {
         background-color: transparent;
         border: 1.5px solid white;
         color: white;
@@ -34,11 +42,11 @@
     <pre>
     <table>
       <tbody id="game">
-        <tr><td>-></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>-></td></tr>
+        <tr><td>-></td><td><button></button></td><td><button></td><td><button></td><td><button></td><td><button></td><td></td></tr>
+        <tr><td></td><td><button></button></td><td><button></td><td><button></td><td><button></td><td><button></td><td></td></tr>
+        <tr><td></td><td><button></button></td><td><button></td><td><button></td><td><button></td><td><button></td><td></td></tr>
+        <tr><td></td><td><button></button></td><td><button></td><td><button></td><td><button></td><td><button></td><td></td></tr>
+        <tr><td></td><td><button></button></td><td><button></td><td><button></td><td><button></td><td><button></td><td>-></td></tr>
       </tbody>
     </table>
     <h2 id="result">let's go!</h2>

@@ -18,7 +18,7 @@
       }
     }
 
-    size() {
+    size(): number {
       return this._a.length
     }
   }
@@ -81,12 +81,13 @@
   }
 
   class Pipe {
-    pipe: {"pipe-type": string, "pipe-index": string}
+    pipe: {"pipe-type": string, "pipe-index": string, "pipe-pos": number[]}
 
-    constructor(pt, pi) {
+    constructor(pt: string, pi: string, pp: number[]) {
       this.pipe = {
         "pipe-type": pt,
-        "pipe-index": pi
+        "pipe-index": pi,
+        "pipe-pos": pp
       }
     }
 
@@ -104,6 +105,10 @@
 
     set index(pi) {
       this.pipe["pipe-index"] = pi
+    }
+
+    get pos() {
+      return this.pipe["pipe-pos"]
     }
 
     get shape() {
@@ -125,16 +130,16 @@
   class Board {
     pipes: Pipe[][]
 
-    constructor(bps) {
+    constructor(bps: Pipe[][] | null) {
     this.pipes = [new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]
       for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
           if (bps[i][j] == null) {
             let type = Math.floor(Math.random() * 3 + 1).toString()
             let index = Math.floor(Math.random() * pipes[type].length).toString()
-            this.pipes[i][j] = new Pipe(type, index)
+            this.pipes[i][j] = new Pipe(type, index, [i, j])
           } else {
-            this.pipes[i][j] = new Pipe(bps[i][j][0], bps[i][j][1])
+            this.pipes[i][j] = new Pipe(bps[i][j][0], bps[i][j][1], bps[i][j][2])
           }
         }
       }
@@ -282,46 +287,49 @@
   let board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)])
 
   let game = $("#game")
-  game.children().each(function(i, g) {
-    $.each(g.children, function(j, h) {
-      if (j != 0 && j != 6) {
-        let pipe = board.pipes[i][j-1]
-        $(h).attr("id", `pipe-${i}-${j-1}`)
-        $(h).attr("col", i)
-        $(h).attr("row", j-1)
-        $(h).attr("pipe-type", pipe.type)
-        $(h).attr("pipe-index", pipe.index)
-        $(h).text(pipes[pipe.type][pipe.index])
-        $(h).css("user-select", "none")
+  for (const [i, g] of game.children().get().entries()) {
+    for (const [j, h] of g.childNodes.entries()) {
+      if (j == 0 || j == 6) continue
+      let pipe = board.pipes[i][j-1]
 
-        $(h).on("click", function() {
-          const c = parseInt($(this).attr("col")), r = parseInt($(this).attr("row"))
+      let b = h.childNodes[0]
+      console.log(b)
+      $(b).attr("id", `pipe-${i}-${j-1}`)
+      $(b).attr("col", i)
+      $(b).attr("row", j-1)
+      $(b).attr("pipe-type", pipe.type)
+      $(b).attr("pipe-index", pipe.index)
+      $(b).text(pipes[pipe.type][pipe.index])
+      $(b).css("user-select", "none")
 
-          for (let i = 0; i < board.pipes.length; i++) {
-            for (let j = 0; j < board.pipes[0].length; j++) {
-              $(`#pipe-${i}-${j}`).css("color", "white")
+      $(b).on("click", function() {
+        const c = parseInt($(this).attr("col")), r = parseInt($(this).attr("row"))
+
+        for (let i = 0; i < board.pipes.length; i++) {
+          for (let j = 0; j < board.pipes[0].length; j++) {
+            $(`#pipe-${i}-${j}`).css("color", "white")
+          }
+        }
+        board.pipes[c][r] = board.pipes[c][r].rotate()
+        $(this).text(board.pipes[c][r].shape)
+
+        let [cps, goal] = board.connecting_pipes()
+        for (let k = 0; k < cps.length; k++) {
+          for (let l = 0; l < cps[0].length; l++) {
+            if (cps[k][l] == true) {
+              $(`#pipe-${k}-${l}`).css("color", "#0f0")
             }
           }
-          board.pipes[c][r] = board.pipes[c][r].rotate()
-          $(this).text(board.pipes[c][r].shape)
+        }
+        if (goal) {
+          $("#result").text("clear!!")
+        } else {
+          $("#result").text("let's go!!")
+        }
+      })
+    }
+  }
 
-          let [cps, goal] = board.connecting_pipes()
-          for (let k = 0; k < cps.length; k++) {
-            for (let l = 0; l < cps[0].length; l++) {
-              if (cps[k][l] == true) {
-                $(`#pipe-${k}-${l}`).css("color", "#0f0")
-              }
-            }
-          }
-          if (goal) {
-            $("#result").text("clear!!")
-          } else {
-            $("#result").text("let's go!!")
-          }
-        })
-      }
-    })
-  })
   let [cps, goal] = board.connecting_pipes()
   for (let i = 0; i < cps.length; i++) {
     for (let j = 0; j < cps[0].length; j++) {
