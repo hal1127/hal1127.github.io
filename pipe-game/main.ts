@@ -1,21 +1,26 @@
 {
-  function Stack() {
-    this.__a = new Array();
-  }
+  class Queue {
+    _a: any[]
 
-  Stack.prototype.push = function(o) {
-    this.__a.push(o);
-  }
-
-  Stack.prototype.pop = function() {
-    if( this.__a.length > 0 ) {
-      return this.__a.pop();
+    constructor() {
+      this._a = []
     }
-    return null;
-  }
 
-  Stack.prototype.size = function() {
-    return this.__a.length;
+    push(q) {
+      this._a.push(q)
+    }
+
+    pop() {
+      if (this._a.length > 0) {
+        return this._a.pop()
+      } else {
+        return null
+      }
+    }
+
+    size() {
+      return this._a.length
+    }
   }
 
   let l_pipe = [
@@ -151,7 +156,7 @@
 
     // 全体で入口からつながっているパイプを返す
     connecting_pipes(): [boolean[][], boolean] {
-      let q = new Stack()
+      let q = new Queue()
       let pos = [0, 0] // [col, row]
       let c = pos[0], r = pos[1]
       let pipe = board.pipes[c][r]

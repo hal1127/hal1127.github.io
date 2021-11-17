@@ -5,6 +5,25 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, _Board_lower_pipe, _Board_left_pipe, _Board_is_mutual_connect, _Board_connects_vec;
 {
+    class Queue {
+        constructor() {
+            this._a = [];
+        }
+        push(q) {
+            this._a.push(q);
+        }
+        pop() {
+            if (this._a.length > 0) {
+                return this._a.pop();
+            }
+            else {
+                return null;
+            }
+        }
+        size() {
+            return this._a.length;
+        }
+    }
     function Stack() {
         this.__a = new Array();
     }
@@ -133,7 +152,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
         }
         // 全体で入口からつながっているパイプを返す
         connecting_pipes() {
-            let q = new Stack();
+            let q = new Queue();
             let pos = [0, 0]; // [col, row]
             let c = pos[0], r = pos[1];
             let pipe = board.pipes[c][r];
