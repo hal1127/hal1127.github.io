@@ -194,29 +194,6 @@
       return [bfs, goal]
     }
 
-    // can_connect(c, r, dir) {
-    //   if (!this.#is_in_board(c+dir[0], r+dir[1])) return false
-    //   let pipe = this.pipes[c+dir[0]][r+dir[1]]
-    //   for (let i = 0; i < pipes[pipe.type].length; i++) {
-    //     for (const c of pipe_connects[pipe.type][i]) {
-    //       if (this.#array_equal([c[0]+dir[0], c[1]+dir[1]], [0, 0])) {
-    //         return true
-    //       }
-    //     }
-    //   }
-    //   return false
-    // }
-
-    // can_connect_pipes(c, r): number[][] {
-    //   let p = []
-    //   for (const connect of this.pipes[c][r].connects) {
-    //     if (this.can_connect(c, r, connect)) {
-    //       p.push([c+connect[0], r+connect[1]])
-    //     }
-    //   }
-    //   return p
-    // }
-
     can_clear(): boolean {
       let self = this
       let used: boolean[][] = []
