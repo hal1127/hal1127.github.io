@@ -1,15 +1,10 @@
-"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, _Board_lower_pipe, _Board_left_pipe, _Board_is_mutual_connect, _Board_connects_vec;
-Object.defineProperty(exports, "__esModule", { value: true });
-const jQuery_1 = __importDefault(require("jQuery"));
+import $ from 'jQuery';
 {
     function Stack() {
         this.__a = new Array();
@@ -256,40 +251,40 @@ const jQuery_1 = __importDefault(require("jQuery"));
     };
     // let board = new Board([[["3", "0"],["2", "0"],,,], new Array(5), new Array(5), new Array(5), new Array(5)])
     let board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]);
-    let game = (0, jQuery_1.default)("#game");
+    let game = $("#game");
     game.children().each(function (i, g) {
-        jQuery_1.default.each(g.children, function (j, h) {
+        $.each(g.children, function (j, h) {
             if (j != 0 && j != 6) {
                 let pipe = board.pipes[i][j - 1];
-                (0, jQuery_1.default)(h).attr("id", `pipe-${i}-${j - 1}`);
-                (0, jQuery_1.default)(h).attr("col", i);
-                (0, jQuery_1.default)(h).attr("row", j - 1);
-                (0, jQuery_1.default)(h).attr("pipe-type", pipe.type);
-                (0, jQuery_1.default)(h).attr("pipe-index", pipe.index);
-                (0, jQuery_1.default)(h).text(pipes[pipe.type][pipe.index]);
-                (0, jQuery_1.default)(h).css("user-select", "none");
-                (0, jQuery_1.default)(h).on("click", function () {
-                    const c = parseInt((0, jQuery_1.default)(this).attr("col")), r = parseInt((0, jQuery_1.default)(this).attr("row"));
+                $(h).attr("id", `pipe-${i}-${j - 1}`);
+                $(h).attr("col", i);
+                $(h).attr("row", j - 1);
+                $(h).attr("pipe-type", pipe.type);
+                $(h).attr("pipe-index", pipe.index);
+                $(h).text(pipes[pipe.type][pipe.index]);
+                $(h).css("user-select", "none");
+                $(h).on("click", function () {
+                    const c = parseInt($(this).attr("col")), r = parseInt($(this).attr("row"));
                     for (let i = 0; i < board.pipes.length; i++) {
                         for (let j = 0; j < board.pipes[0].length; j++) {
-                            (0, jQuery_1.default)(`#pipe-${i}-${j}`).css("color", "white");
+                            $(`#pipe-${i}-${j}`).css("color", "white");
                         }
                     }
                     board.pipes[c][r] = board.pipes[c][r].rotate();
-                    (0, jQuery_1.default)(this).text(board.pipes[c][r].shape);
+                    $(this).text(board.pipes[c][r].shape);
                     let [cps, goal] = board.connecting_pipes();
                     for (let k = 0; k < cps.length; k++) {
                         for (let l = 0; l < cps[0].length; l++) {
                             if (cps[k][l] == true) {
-                                (0, jQuery_1.default)(`#pipe-${k}-${l}`).css("color", "green");
+                                $(`#pipe-${k}-${l}`).css("color", "green");
                             }
                         }
                     }
                     if (goal) {
-                        (0, jQuery_1.default)("#result").text("clear!!");
+                        $("#result").text("clear!!");
                     }
                     else {
-                        (0, jQuery_1.default)("#result").text("let's go!!");
+                        $("#result").text("let's go!!");
                     }
                 });
             }
@@ -299,47 +294,47 @@ const jQuery_1 = __importDefault(require("jQuery"));
     for (let i = 0; i < cps.length; i++) {
         for (let j = 0; j < cps[0].length; j++) {
             if (cps[i][j] == true) {
-                (0, jQuery_1.default)(`#pipe-${i}-${j}`).css("color", "green");
+                $(`#pipe-${i}-${j}`).css("color", "green");
             }
         }
     }
     if (goal) {
-        (0, jQuery_1.default)("#result").text("clear!!");
+        $("#result").text("clear!!");
     }
     else {
-        (0, jQuery_1.default)("#result").text("let's go!!");
+        $("#result").text("let's go!!");
     }
-    (0, jQuery_1.default)("#reload").on("click", function () {
+    $("#reload").on("click", function () {
         board = new Board([new Array(5), new Array(5), new Array(5), new Array(5), new Array(5)]);
         game.children().each(function (i, g) {
-            (0, jQuery_1.default)(g).children().each(function (j, h) {
+            $(g).children().each(function (j, h) {
                 if (j != 0 && j != 6) {
                     let pipe = board.pipes[i][j - 1];
-                    (0, jQuery_1.default)(h).attr("pipe-type", pipe.type);
-                    (0, jQuery_1.default)(h).attr("pipe-index", pipe.index);
-                    (0, jQuery_1.default)(h).text(pipes[pipe.type][pipe.index]);
-                    (0, jQuery_1.default)(h).css("user-select", "none");
+                    $(h).attr("pipe-type", pipe.type);
+                    $(h).attr("pipe-index", pipe.index);
+                    $(h).text(pipes[pipe.type][pipe.index]);
+                    $(h).css("user-select", "none");
                 }
             });
         });
         for (let i = 0; i < board.pipes.length; i++) {
             for (let j = 0; j < board.pipes[0].length; j++) {
-                (0, jQuery_1.default)(`#pipe-${i}-${j}`).css("color", "white");
+                $(`#pipe-${i}-${j}`).css("color", "white");
             }
         }
         let [cps, goal] = board.connecting_pipes();
         for (let i = 0; i < cps.length; i++) {
             for (let j = 0; j < cps[0].length; j++) {
                 if (cps[i][j] == true) {
-                    (0, jQuery_1.default)(`#pipe-${i}-${j}`).css("color", "green");
+                    $(`#pipe-${i}-${j}`).css("color", "green");
                 }
             }
         }
         if (goal) {
-            (0, jQuery_1.default)("#result").text("clear!!");
+            $("#result").text("clear!!");
         }
         else {
-            (0, jQuery_1.default)("#result").text("let's go!!");
+            $("#result").text("let's go!!");
         }
     });
 }
