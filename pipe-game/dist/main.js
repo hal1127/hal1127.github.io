@@ -291,7 +291,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
                     }
                 }
                 if (goal) {
-                    $("#result").text("clear!!");
+                    $("#result").text("congratulations!!");
                 }
                 else {
                     $("#result").text("let's go!!");
@@ -308,7 +308,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
         }
     }
     if (goal) {
-        $("#result").text("clear!!");
+        $("#result").text("congratulations!!");
     }
     else {
         $("#result").text("let's go!!");
@@ -340,7 +340,7 @@ var _Board_instances, _Board_is_in_board, _Board_upper_pipe, _Board_right_pipe, 
             }
         }
         if (goal) {
-            $("#result").text("clear!!");
+            $("#result").text("congratulations!!");
         }
         else {
             $("#result").text("let's go!!");

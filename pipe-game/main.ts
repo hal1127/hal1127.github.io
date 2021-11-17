@@ -322,7 +322,7 @@
           }
         }
         if (goal) {
-          $("#result").text("clear!!")
+          $("#result").text("congratulations!!")
         } else {
           $("#result").text("let's go!!")
         }
@@ -340,7 +340,7 @@
   }
 
   if (goal) {
-    $("#result").text("clear!!")
+    $("#result").text("congratulations!!")
   } else {
     $("#result").text("let's go!!")
   }
@@ -374,7 +374,7 @@
     }
 
     if (goal) {
-      $("#result").text("clear!!")
+      $("#result").text("congratulations!!")
     } else {
       $("#result").text("let's go!!")
     }
