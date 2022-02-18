@@ -3,7 +3,7 @@
 ## 作ったもの（作成順）
 
 - [HiyoCatch](https://hiyocatch.netlify.app/) <br>
-スマホ推奨(PCからの場合は、マウスを左側に置いておくとうまく行きます)
+Unity製のゲーム。※スマホ推奨(PCからの場合は、マウスを左側に置いておくとうまく行きます)
 
 - [スクロール大会](https://scroll-tournament.halucky.net/) <br>
 スタートを押してスクロール量を競うサイト。ちなみにサーバーはVPS、OSはUbuntu（Google CloudとかAWSとか使ってる人もいるらしいので...）。
