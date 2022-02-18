@@ -6,7 +6,7 @@
 スマホ推奨(PCからの場合は、マウスを左側に置いておくとうまく行きます)
 
 - [スクロール大会](https://scroll-tournament.halucky.net/) <br>
-スタートを押してスクロール量を競うサイト。ちなみにサーバーはVPS、OSはUbuntu（なんかGoogleとかAWSとか使ってる人もいるらしいので...）。
+スタートを押してスクロール量を競うサイト。ちなみにサーバーはVPS、OSはUbuntu（Google CloudとかAWSとか使ってる人もいるらしいので...）。
 
 - [パイプを繋ぐゲーム](https://hal1127.github.io/pipe-game) <br>
 クラス、幅優先探索、再帰関数。今まで勉強したこと全部盛りのゲーム
