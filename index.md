@@ -16,7 +16,7 @@ Vueを使って初めて作ったサイト。普通に便利。
 
 - [画像の画質改善](https://github.com/hal1127/engineering_design_ryukyu/tree/main/prod)<br>
 授業でしたもの。グループ内で見るために分かりやすくまとめたので、他の人が見てもなんとなく面白いはず。<br>
-main.ipynbが画質改善に取り組んだもの。adv.ipynbが発表のスライド作成のための追加調査。
+`main.ipynb`が画質改善に取り組んだもの。`adv.ipynb`が発表のスライド作成のための追加調査。
 
 ---
 
