@@ -12,7 +12,7 @@ Vueを使って初めて作ったサイト。普通に便利。
 スタートを押してからのスクロール量を競うサイト（Webアプリケーション）。ちなみにサーバーはVPS、OSはUbuntu。
 
 - [particles](https://hal1127.github.io/particles) <br>
-TypeScriptとCreateJSのお勉強
+TypeScriptとCreateJS(Canvas)のお勉強
 
 - [パイプを繋ぐゲーム](https://hal1127.github.io/pipe-game) <br>
 パイプを繋いでゴールを目指すゲームのできるサイト。クラス、幅優先探索、再帰関数。今まで勉強したアルゴリズム全部盛り。開発言語はTypeScript。
