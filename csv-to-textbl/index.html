@@ -7,7 +7,7 @@
   <link href="./dist/styles.css" rel="stylesheet">
 </head>
 <body>
-  <div class="flex">
+  <div class="flex flex-wrap">
     <main class="mx-4 h-screen">
       <h1 class="text-2xl font-bold">csv→latexのtable</h1>
       <h2 class="text-xl font-bold">csv</h2>
@@ -23,6 +23,25 @@
         表を表すcsvというデータをからlatexのtableに変換する事ができます。<br>
         表のcsvデータはエクセルをcsv形式で保存して得るのが一番楽だと思います。
       </p>
+      <h2 class="text-xl font-bold mt-2">csvって？</h2>
+      <p class="">
+        表を表すデータで、コンマと改行で表します。<br>
+        例えば、次のようなcsvは、
+      </p>
+      <pre><code>aaa,bbb<br>ccc,ddd</code></pre>
+      <p>こんな感じの表を表します。</p>
+      <table class="border-collapse border border-black">
+        <tbody>
+          <tr>
+            <td class="border border-black p-1.5">aaa</td>
+            <td class="border border-black p-1.5">bbb</td>
+          </tr>
+          <tr>
+            <td class="border border-black p-1.5">ccc</td>
+            <td class="border border-black p-1.5">ddd</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <script src="./dist/main.js"></script>
