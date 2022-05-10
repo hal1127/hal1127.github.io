@@ -9,8 +9,14 @@
 <body>
   <div class="flex flex-wrap">
     <main class="ml-4 mr-10 h-screen">
-      <h1 class="text-2xl font-bold">csv→latexのtable</h1>
-      <h2 class="text-xl font-bold">csv</h2>
+      <h1 class="text-2xl font-bold"><span id="mode">csv</span>→latexのtable</h1>
+      <h2>
+        <select id="mode-select" class="text-xl font-bold">
+          <option value="csv">csv</option>
+          <option value="Excel">Excel</option>
+        </select>
+        <span id="notion" class="text-base"></span>
+      </h2>
       <textarea id="csv" class="border-2 font-mono" cols="40" rows="8"></textarea><br>
       <span class="text-lg">↓</span>
       <h2 class="text-xl font-bold">table</h2>
