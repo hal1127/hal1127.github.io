@@ -13,7 +13,7 @@ const latexTblFoot = `  \\end{tabular}
 $('#csv').on('keyup', function() {
   const csvArr = $('#csv').val().trim().split('\n')
   const colLength = (csvArr[0].match(/[^\\]\,/g) || []).length
-  const tblArr = csvArr.map(x => x.replace(',', ' & '))
+  const tblArr = csvArr.map(x => x.replaceAll(',', ' & '))
   const tbl = tblArr.map(x => '    '+x+' \\\\\\hline\n').join('')
 
   let latexTbl = latexTblHead.replace('$colstyle$', '|c'.repeat(colLength+1)+'|') + tbl + latexTblFoot
