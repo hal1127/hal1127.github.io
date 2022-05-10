@@ -4,7 +4,13 @@ import ClipboardJS from 'clipboard'
 function convertToLatexTable(val) {
   if (val.trim() === '') return ''
   const csvArr = val.trim().split('\n')
-  const colLength = (csvArr[0].match(/[^\\]\,/g) || []).length
+
+  let colLength;
+  if (mode === 'csv') {
+    colLength = (csvArr[0].match(/[^\\]\,/g) || []).length
+  } else {
+    colLength = (csvArr[0].match(/\t/g) || []).length
+  }
 
   const divideChar = (mode === 'csv' ? ',' : '\t')
   const tblArr = csvArr.map(x => x.replaceAll(divideChar, ' & '))
