@@ -21,6 +21,9 @@ TypeScriptとCreateJS(Canvas)のお勉強。参考: [https://ics.media/tutorial-
 授業でしたもの。グループ内で見るために分かりやすくまとめたので、他の人が見てもなんとなく面白いはず。<br>
 `main.ipynb`が画質改善に取り組んだもの。`adv.ipynb`が発表のスライド作成のための追加調査。
 
+- [csv→latexのtable](https://hal1127.github.io/csv-to-textbl/)<br>
+csvからlatexのtableを作成できるサイト。なお、tableのスタイルはうちの研究室に準拠する。
+
 ---
 
 - [AtCoder](https://atcoder.jp/users/Haruki11)
